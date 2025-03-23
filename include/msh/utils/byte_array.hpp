@@ -25,7 +25,7 @@ class ByteArray {
 
     ByteArray(std::initializer_list<value_type> init) : data_(init) {}
 
-    explicit ByteArray(const std::string& str) 
+    explicit ByteArray(const std::string& str)
         : data_(reinterpret_cast<const value_type*>(str.data()),
                 reinterpret_cast<const value_type*>(str.data()) + str.size()) {}
 

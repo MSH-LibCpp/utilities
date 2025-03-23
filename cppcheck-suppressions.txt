@@ -1,9 +1,0 @@
-// Suppress warnings about unused functions in header files
-unusedFunction:include/msh/utils/*.hpp
-
-// Suppress warnings about missing include guards (if using pragma once)
-missingIncludeSystem:include/msh/utils/*.hpp
-
-// Suppress warnings about unused parameters in template functions
-unusedStructMember:include/msh/utils/*.hpp
-unusedVariable:include/msh/utils/*.hpp 
