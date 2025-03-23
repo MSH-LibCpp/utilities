@@ -23,9 +23,12 @@ list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake")
 include(cppcheck)
 include(opencppcoverage)
 
+find_package(Plog REQUIRED)
+
 # Create interface library for header-only implementation
 add_library(msh_utils INTERFACE)
 add_library(msh::utils ALIAS msh_utils)
+target_link_libraries(msh_utils INTERFACE plog::plog)
 
 # Set include directories
 target_include_directories(msh_utils INTERFACE
@@ -33,8 +36,13 @@ target_include_directories(msh_utils INTERFACE
     $<INSTALL_INTERFACE:include>
 )
 
+set(MSH_UTILS_STATIC_SOURCES
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/byte_array.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/file_io.cpp
+)
+
 # Create a static library version for testing and coverage
-add_library(msh_utils_static STATIC ${CMAKE_CURRENT_SOURCE_DIR}/src/byte_array.cpp)
+add_library(msh_utils_static STATIC ${MSH_UTILS_STATIC_SOURCES})
 target_include_directories(msh_utils_static PRIVATE
     ${CMAKE_CURRENT_SOURCE_DIR}/include/msh/utils
 )
