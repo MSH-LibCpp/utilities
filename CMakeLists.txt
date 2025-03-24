@@ -59,10 +59,11 @@ install(DIRECTORY include/
 
 # Testing
 if(CMAKE_PROJECT_NAME STREQUAL PROJECT_NAME)
-    include(CTest)
     if(BUILD_TESTING)
         # Find Catch2
         find_package(Catch2 3.5.3 REQUIRED)
+        include(CTest)
+        enable_testing()
 
         add_subdirectory(tests)
     endif()

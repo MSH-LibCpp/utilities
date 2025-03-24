@@ -1,5 +1,6 @@
+#include "msh/utils/byte_array.hpp"
+
 #include <catch2/catch_test_macros.hpp>
-#include <msh/utils/byte_array.hpp>
 #include <string>
 
 using namespace msh::utils;
@@ -149,7 +150,7 @@ TEST_CASE("ByteArray string operations", "[ByteArray]") {
         CHECK(arr[0] == 0x01);
         CHECK(arr[1] == 0xAB);
         CHECK(arr[2] == 0xFF);
-        
+
         CHECK_THROWS_AS(ByteArray::fromHexString("0"), std::invalid_argument);
         CHECK_THROWS_AS(ByteArray::fromHexString("0G"), std::invalid_argument);
     }
@@ -174,4 +175,4 @@ TEST_CASE("ByteArray iterator operations", "[ByteArray]") {
         CHECK(vec[1] == 0x02);
         CHECK(vec[2] == 0x03);
     }
-} 
+}

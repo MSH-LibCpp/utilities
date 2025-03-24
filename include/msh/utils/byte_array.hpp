@@ -23,6 +23,9 @@ class ByteArray {
 
     ByteArray(const value_type* data, const size_type size) : m_data(data, data + size) {}
 
+    template<typename InputIt>
+    ByteArray(InputIt first, InputIt last) : m_data(first, last) {}
+
     ByteArray(const std::initializer_list<value_type> init) : m_data(init) {}
 
     explicit ByteArray(const std::string& str)

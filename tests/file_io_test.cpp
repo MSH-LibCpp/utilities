@@ -1,9 +1,9 @@
+#include "msh/utils/file_io.hpp"
+
 #include <catch2/catch_test_macros.hpp>
 #include <filesystem>
 #include <fstream>
 #include <random>
-
-#include <msh/utils/file_io.hpp>
 
 using namespace msh::utils;
 
@@ -67,7 +67,7 @@ TEST_CASE("file_io: large file operations", "[file_io]") {
             byte = static_cast<uint8_t>(dis(gen));
         }
         large_file.write(reinterpret_cast<char*>(buffer.data()),
-                        static_cast<std::streamsize>(std::min(buffer.size(), file_size - i)));
+                         static_cast<std::streamsize>(std::min(buffer.size(), file_size - i)));
     }
     large_file.close();
 
@@ -79,4 +79,4 @@ TEST_CASE("file_io: large file operations", "[file_io]") {
 
     // Cleanup
     std::filesystem::remove_all(temp_dir);
-} 
+}
