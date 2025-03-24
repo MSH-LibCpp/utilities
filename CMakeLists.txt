@@ -52,42 +52,9 @@ if(ENABLE_STATIC_ANALYSIS)
     configure_cppcheck(msh_utils_static "${CMAKE_CURRENT_SOURCE_DIR}/include/msh/utils")
 endif()
 
-# Install targets
-install(TARGETS msh_utils
-    EXPORT msh_utils-targets
-    INCLUDES DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}
-)
-
 install(DIRECTORY include/
     DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}
     FILES_MATCHING PATTERN "*.hpp"
-)
-
-# Export targets
-install(EXPORT msh_utils-targets
-    FILE msh_utils-targets.cmake
-    NAMESPACE msh::
-    DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/msh_utils
-)
-
-# Create and install package config
-include(CMakePackageConfigHelpers)
-write_basic_package_version_file(
-    "msh_utils-config-version.cmake"
-    VERSION ${PROJECT_VERSION}
-    COMPATIBILITY SameMajorVersion
-)
-
-configure_package_config_file(
-    "${CMAKE_CURRENT_SOURCE_DIR}/cmake/msh_utils-config.cmake.in"
-    "${CMAKE_BINARY_DIR}/msh_utils-config.cmake"
-    INSTALL_DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/msh_utils
-)
-
-install(FILES
-    "${CMAKE_BINARY_DIR}/msh_utils-config.cmake"
-    "${CMAKE_BINARY_DIR}/msh_utils-config-version.cmake"
-    DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/msh_utils
 )
 
 # Testing
