@@ -25,12 +25,18 @@ find_package(plog REQUIRED)
 find_package(nlohmann_json REQUIRED)
 
 # Create interface library for header-only implementation
-add_library(msh_utils INTERFACE)
-add_library(msh::utils ALIAS msh_utils)
-target_link_libraries(msh_utils INTERFACE plog::plog nlohmann_json::nlohmann_json)
+set(MSH_UTILS_TARGET msh_utils)
+add_library(${MSH_UTILS_TARGET} INTERFACE)
+add_library(msh::utils ALIAS ${MSH_UTILS_TARGET})
+target_link_libraries(${MSH_UTILS_TARGET} INTERFACE plog::plog nlohmann_json::nlohmann_json)
+
+# Set export name
+# find_package(msh_utils REQUIRED)
+# target_link_libraries(myapp PRIVATE msh::utils)
+set_target_properties(${MSH_UTILS_TARGET} PROPERTIES EXPORT_NAME utils)
 
 # Set include directories
-target_include_directories(msh_utils INTERFACE
+target_include_directories(${MSH_UTILS_TARGET} INTERFACE
     $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
     $<INSTALL_INTERFACE:include>
 )
@@ -38,7 +44,7 @@ target_include_directories(msh_utils INTERFACE
 include($ENV{MSH_ROOT_PATH}/configs/cmake/cppcheck.cmake)
 if(ENABLE_STATIC_ANALYSIS)
     configure_cppcheck(
-        TARGET msh_utils
+        TARGET ${MSH_UTILS_TARGET}
         PATHS
             "${CMAKE_CURRENT_SOURCE_DIR}/include/msh/utils"
     )
@@ -46,7 +52,7 @@ endif()
 
 include($ENV{MSH_ROOT_PATH}/configs/cmake/installpackages.cmake)
 install_interface_library(
-    TARGET msh_utils
+    TARGET ${MSH_UTILS_TARGET}
 )
 
 # Testing

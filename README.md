@@ -90,7 +90,7 @@ You can also use the `msh::utils` interface target in CMake.
 
 ```cpp
 # CMakeLists.txt
-find_package(utilities REQUIRED)
+find_package(msh_utils REQUIRED)
 ...
 add_library(foo ...)
 ...
