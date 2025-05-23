@@ -16,19 +16,18 @@ set(CMAKE_CXX_EXTENSIONS OFF)
 # Project Options
 option(ENABLE_COVERAGE "Enable coverage reporting" ON)
 option(ENABLE_STATIC_ANALYSIS "Enable static analysis" ON)
-option(BUILD_TESTING "Build test suite" ON)
+option(BUILD_TESTS "Build test suite" ON)
 
 # Include custom CMake modules
 list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake")
-include(cppcheck)
-include(opencppcoverage)
 
-find_package(Plog REQUIRED)
+find_package(plog REQUIRED)
+find_package(nlohmann_json REQUIRED)
 
 # Create interface library for header-only implementation
 add_library(msh_utils INTERFACE)
 add_library(msh::utils ALIAS msh_utils)
-target_link_libraries(msh_utils INTERFACE plog::plog)
+target_link_libraries(msh_utils INTERFACE plog::plog nlohmann_json::nlohmann_json)
 
 # Set include directories
 target_include_directories(msh_utils INTERFACE
@@ -36,30 +35,23 @@ target_include_directories(msh_utils INTERFACE
     $<INSTALL_INTERFACE:include>
 )
 
-set(MSH_UTILS_STATIC_SOURCES
-    ${CMAKE_CURRENT_SOURCE_DIR}/src/byte_array.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/src/file_io.cpp
-)
-
-# Create a static library version for testing and coverage
-add_library(msh_utils_static STATIC ${MSH_UTILS_STATIC_SOURCES})
-target_include_directories(msh_utils_static PRIVATE
-    ${CMAKE_CURRENT_SOURCE_DIR}/include/msh/utils
-)
-target_link_libraries(msh_utils_static PRIVATE msh_utils)
-
+include($ENV{MSH_ROOT_PATH}/configs/cmake/cppcheck.cmake)
 if(ENABLE_STATIC_ANALYSIS)
-    configure_cppcheck(msh_utils_static "${CMAKE_CURRENT_SOURCE_DIR}/include/msh/utils")
+    configure_cppcheck(
+        TARGET msh_utils
+        PATHS
+            "${CMAKE_CURRENT_SOURCE_DIR}/include/msh/utils"
+    )
 endif()
 
-install(DIRECTORY include/
-    DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}
-    FILES_MATCHING PATTERN "*.hpp"
+include($ENV{MSH_ROOT_PATH}/configs/cmake/installpackages.cmake)
+install_interface_library(
+    TARGET msh_utils
 )
 
 # Testing
 if(CMAKE_PROJECT_NAME STREQUAL PROJECT_NAME)
-    if(BUILD_TESTING)
+    if(BUILD_TESTS)
         # Find Catch2
         find_package(Catch2 3.5.3 REQUIRED)
         include(CTest)
